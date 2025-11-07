@@ -18,6 +18,18 @@ describe('Users API', () => {
         expect(res.status).toBe(201)
         expect(res.body.data).toMatchObject({ name: 'Ana', email: 'ana@ex.com' })
     })
+    it('PUT /api/users atualiza usuário válido', async () => {
+        var user = await prisma.user.create({ data: { name: 'Ana', email: 'ana@ex.com' } })
+        var updatedUser = { name: 'Anabelle', email: 'anabelle@ex.com' };
+        const res = await request(app)
+            .put(`/api/users/${user.id}`)
+            .send(updatedUser)
+        // expect(res.body.data).toMatchObject(user)
+        const res2 = await request(app).get('/api/users')
+        expect(res2.status).toBe(200)
+        expect(Array.isArray(res2.body.data)).toBe(true)
+        expect(res2.body.data.some((u: any) => u.email === 'anabelle@ex.com')).toBe(true)
+    })
     it('GET /api/users lista usuários', async () => {
         await prisma.user.create({ data: { name: 'Ana', email: 'ana@ex.com' } })
         const res = await request(app).get('/api/users')
