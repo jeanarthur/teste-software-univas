@@ -170,7 +170,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       where: { id }
     })
 
-    res.json({
+    res.status(204).json({
       success: true,
       message: 'User deleted successfully'
     })
